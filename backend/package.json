@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "cross-env TNS_ADMIN=C:\\OracleSoft\\instantclient-basiclite-windows\\instantclient_23_8\\network\\admin nodemon src/index.js"
   },
   "author": "Sistemas 6to Semestre Universidad Regional Guatemala 2025",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "oracledb": "^6.9.0"
   },
   "devDependencies": {
+    "cross-env": "^10.0.0",
     "nodemon": "^3.1.10"
   }
 }

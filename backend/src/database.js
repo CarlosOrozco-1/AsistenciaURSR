@@ -6,7 +6,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Configurar el directorio del Oracle Instant Client
-// Asegúrate de que esta ruta sea la correcta para tu sistema
 try {
     oracledb.initOracleClient({
         libDir: 'C:\\OracleSoft\\instantclient-basiclite-windows\\instantclient_23_8'
@@ -16,27 +15,29 @@ try {
     process.exit(1);
 }
 
-// Objeto con la configuración de la conexión, leído desde .env
+// Objeto con la configuración de la conexión
 const dbConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     connectString: process.env.DB_CONNECT_STRING,
 };
 
-// Función asíncrona para probar la conexión
-async function testConnection() {
+// Función genérica para ejecutar consultas SQL
+async function ejecutarConsulta(sql, binds = []) {
     let connection;
     try {
-        // Obtener una conexión del pool
         connection = await oracledb.getConnection(dbConfig);
-        console.log('¡Conexión a la base de datos Oracle exitosa!');
-
-    } catch (err) {
-        console.error('Error al conectar a la base de datos:', err);
+        // La opción outFormat nos devuelve objetos, lo cual es muy útil
+        const result = await connection.execute(sql, binds, { outFormat: oracledb.OUT_FORMAT_OBJECT });
+        return result.rows;
+    } catch (err)
+    {
+        console.error('Error en la consulta:', err);
+        // Re-lanzamos el error para que el controlador que llamó a esta función lo maneje
+        throw err;
     } finally {
         if (connection) {
             try {
-                // Cerrar la conexión
                 await connection.close();
             } catch (err) {
                 console.error('Error al cerrar la conexión:', err);
@@ -45,7 +46,7 @@ async function testConnection() {
     }
 }
 
-// Exportamos la función para poder usarla en otros archivos
+// Exportamos la función correcta para que otros archivos puedan usarla
 module.exports = {
-    testConnection
+    ejecutarConsulta
 };
