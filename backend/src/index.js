@@ -25,6 +25,7 @@ app.use('/api', require('./routes/tables.routes.js'));  // GET /api/tables
 app.use('api' , require('./routes/table.routes')) //GET /Table/api/name
 app.use('/api', require('./routes/CRUD.routes.js')); //GET /api/CRUD
 app.use('/api', require('./routes/cliente.routes.js')); // POST /api/cliente
+app.use('/api', require('./routes/empleados.routes.js')); // GET /api/empleados
 
 // 1) Levantamos el server YA MISMO (así /api/__ping responde aunque la DB falle)
 const port = process.env.PORT || 3000;
