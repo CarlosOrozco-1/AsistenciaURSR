@@ -1,10 +1,10 @@
-// src/routes/health.routes.js
-const { Router } = require('express');
-const { dbHealth, listTables } = require('../controllers/health.controller');
+// backend/src/routes/health.routes.js
+// Define la ruta /api/health y la asocia al controlador
 
-const router = Router();
+const router = require('express').Router();
+const ctrl = require('../controllers/health.controller');
 
-router.get('/db', dbHealth);
-router.get('/tables', listTables);
+// GET /api/health -> estado del servidor y DB
+router.get('/health', ctrl.health);
 
 module.exports = router;

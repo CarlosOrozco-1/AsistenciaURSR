@@ -1,0 +1,71 @@
+<!-- Tarjeta contenedora -->
+<section class="card">
+
+  <!-- Barra superior: título + acción -->
+  <header class="toolbar">
+    <h2 class="title">Clientes</h2>
+
+    <!-- Botón para ir al formulario de alta -->
+    <a routerLink="/clientes/nuevo" class="btn btn-primary">
+      + Nuevo cliente
+    </a>
+  </header>
+
+  <!-- Mensajes de estado -->
+  <div *ngIf="loading" class="alert info">Cargando…</div>
+  <div *ngIf="error" class="alert error">{{ error }}</div>
+
+  <!-- Controles: tamaño de página y paginación -->
+  <div class="controls">
+    <label class="control">
+      Registros por página:
+      <select [(ngModel)]="limit" (change)="offset = 0; cargar()">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+      </select>
+    </label>
+
+    <div class="spacer"></div>
+
+    <button class="btn btn-outline" (click)="prev()" [disabled]="offset === 0">
+      « Anterior
+    </button>
+    <button class="btn btn-outline" (click)="next()" [disabled]="offset + limit >= total">
+      Siguiente »
+    </button>
+  </div>
+
+  <!-- Contenedor con scroll horizontal en pantallas pequeñas -->
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID_CLIENTE</th>
+          <th>NOMBRE</th>
+          <th>IDENTIFICACION</th>
+          <th>TELEFONO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas -->
+        <tr *ngFor="let c of rows">
+          <td>{{ c.ID_CLIENTE }}</td>
+          <td>{{ c.NOMBRE }}</td>
+          <td>{{ c.IDENTIFICACION }}</td>
+          <td>{{ c.TELEFONO }}</td>
+        </tr>
+
+        <!-- Estado “sin datos” -->
+        <tr *ngIf="!loading && rows.length === 0">
+          <td class="empty" colspan="4">Sin datos</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pie con info de página -->
+  <footer class="footer">
+    Mostrando {{ rows.length }} de {{ total }} — offset {{ offset }}
+  </footer>
+</section>

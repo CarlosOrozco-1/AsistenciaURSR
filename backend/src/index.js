@@ -1,21 +1,50 @@
+// backend/src/index.js
+require('dotenv').config();
 const express = require('express');
-// 1. Importamos nuestras rutas de estudiantes
-const estudianteRoutes = require('./routes/estudiante.routes');
+const cors = require('cors');
+const { initDB, shutdownDB } = require('./database');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// 2. Middlewares: Le decimos a Express que puede entender JSON
 app.use(express.json());
 
-// 3. Rutas: Le decimos a la app que use nuestras rutas de estudiantes
-// Todo lo que empiece con '/api/estudiantes' será manejado por estudianteRoutes
-app.use('/api/estudiantes', estudianteRoutes);
-
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+// --- Logger simple ---
+app.use((req, _res, next) => {
+  console.log(`[REQ] ${req.method} ${req.url}`);
+  next();
 });
 
-// src/index.js
-const healthRoutes = require('./routes/health.routes');
-app.use('/health', healthRoutes);
+// Habilitar CORS para todas las peticiones ANTES de tus rutas
+app.use(cors());
+
+// --- Ping sin DB, para verificar que el server está arriba ---
+app.get('/api/__ping', (_req, res) => res.json({ ok: true, msg: 'pong' }));
+
+// --- Rutas  ---
+app.use('/api', require('./routes/health.routes.js'));  // GET /api/health
+app.use('/api', require('./routes/tables.routes.js'));  // GET /api/tables
+app.use('api' , require('./routes/table.routes')) //GET /Table/api/name
+app.use('/api', require('./routes/CRUD.routes.js')); //GET /api/CRUD
+app.use('/api', require('./routes/cliente.routes.js')); // POST /api/cliente
+
+// 1) Levantamos el server YA MISMO (así /api/__ping responde aunque la DB falle)
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`🚀 API escuchando en http://localhost:${port}`);
+});
+
+// 2) Inicializamos la DB en segundo paso (con logs explícitos)
+(async () => {
+  try {
+    console.log('[DB] Inicializando pool...');
+    await initDB();
+    console.log('✅ [DB] Pool Oracle listo');
+  } catch (err) {
+    console.error('❌ [DB] No se pudo inicializar el pool:', err.message);
+  }
+})();
+
+// Cierre ordenado
+process.on('SIGINT', async () => {
+  await shutdownDB();
+  process.exit(0);
+});
