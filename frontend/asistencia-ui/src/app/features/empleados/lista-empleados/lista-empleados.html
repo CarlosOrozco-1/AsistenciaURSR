@@ -1,0 +1,36 @@
+<div class="container">
+  <h1>Lista de Empleados</h1>
+
+  <!-- Usamos el pipe 'async' para que Angular maneje la suscripción al Observable -->
+  <ng-container *ngIf="empleados$ | async as empleados; else loading">
+    <table *ngIf="empleados.length > 0; else noData">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Puesto</th>
+          <th>Salario</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Iteramos sobre la lista de empleados -->
+        <tr *ngFor="let empleado of empleados">
+          <td>{{ empleado.ID }}</td>
+          <td>{{ empleado.NOMBRE }}</td>
+          <td>{{ empleado.PUESTO }}</td>
+          <td>{{ empleado.SALARIO | currency:'Q' }}</td> <!-- Formateamos como moneda -->
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <!-- Plantilla para mostrar mientras se cargan los datos -->
+  <ng-template #loading>
+    <p>Cargando datos...</p>
+  </ng-template>
+
+  <!-- Plantilla para mostrar si no hay datos -->
+  <ng-template #noData>
+    <p>No se encontraron empleados.</p>
+  </ng-template>
+</div>
