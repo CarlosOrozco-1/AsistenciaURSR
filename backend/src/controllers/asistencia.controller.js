@@ -47,6 +47,35 @@ async function postRegistrarAsistencia(req, res) {
   }
 }
 
+/**
+ * Maneja la petición POST para crear una nueva sesión de clase con un código QR.
+ * @param {object} req - El objeto de la petición (request).
+ * @param {object} res - El objeto de la respuesta (response).
+ */
+async function postCrearSesionQR(req, res) {
+  try {
+    const { idCursoImpartido } = req.body;
+
+    // Validación de entrada: nos aseguramos de recibir un número.
+    if (!idCursoImpartido || typeof idCursoImpartido !== 'number') {
+      return res.status(400).json({ success: false, message: 'El parámetro "idCursoImpartido" es obligatorio y debe ser un número.' });
+    }
+
+    const resultado = await asistenciaService.crearSesionQR(idCursoImpartido);
+
+    if (resultado.success) {
+      // Si la operación es exitosa, devolvemos un 201 (Created) que es más específico.
+      return res.status(201).json(resultado);
+    } else {
+      return res.status(400).json(resultado);
+    }
+
+  } catch (error) {
+    console.error('Error en postCrearSesionQR:', error.message);
+    res.status(500).json({ success: false, message: 'Error interno del servidor.' });
+  }
+}
+
 console.log('✅ Controlador de asistencia cargado.');
 
 module.exports = {

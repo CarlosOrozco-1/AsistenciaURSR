@@ -58,6 +58,55 @@ async function registrarAsistencia(qrCode, carnet) {
   }
 }
 
+/**
+ * Llama al procedimiento 'crear_sesion_qr' del paquete 'PKG_ASISTENCIA'.
+ * @param {number} idCursoImpartido - El ID del curso para el que se crea la sesión.
+ * @returns {Promise<{success: boolean, message: string, qrCode: string | null}>} Un objeto con el resultado.
+ */
+async function crearSesionQR(idCursoImpartido) {
+  console.log(`Servicio: Ejecutando lógica para crear sesión QR para el curso ${idCursoImpartido}`);
+
+  const plsql = `
+    BEGIN
+      PKG_ASISTENCIA.crear_sesion_qr(
+        p_id_curso_impartido  => :idCursoImpartido,
+        p_codigo_qr_generado  => :qrCode,
+        p_resultado           => :resultado,
+        p_detalle             => :detalle
+      );
+    END;
+  `;
+
+  const binds = {
+    idCursoImpartido: idCursoImpartido,
+    // Definimos los parámetros de SALIDA (OUT)
+    qrCode: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 255 },
+    resultado: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 20 },
+    detalle: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 255 }
+  };
+
+  try {
+    const result = await execute(plsql, binds, { autoCommit: true });
+
+    const resultadoBD = result.outBinds.resultado;
+    const detalleBD = result.outBinds.detalle;
+    const qrCodeBD = result.outBinds.qrCode;
+    const exito = resultadoBD === 'EXITO';
+
+    console.log(`Servicio: Respuesta de la BD -> Resultado: ${resultadoBD}, Detalle: "${detalleBD}"`);
+
+    // Devolvemos un objeto estandarizado al controlador.
+    return {
+      success: exito,
+      message: detalleBD,
+      qrCode: exito ? qrCodeBD : null, // Solo devolvemos el QR si la operación fue exitosa
+    };
+  } catch (error) {
+    console.error('Error al ejecutar PKG_ASISTENCIA.crear_sesion_qr:', error);
+    throw new Error('Ocurrió un error al procesar la creación de la sesión en la base de datos.');
+  }
+}
+
 console.log('✅ Servicio de asistencia cargado.');
 
 module.exports = {

@@ -7,11 +7,15 @@ const asistenciaController = require('../controllers/asistencia.controller');
 
 console.log('Cargando rutas de asistencia...');
 
-// --- Definición de la ruta ---
+// --- Definición de la ruta para modulo de Asistencia---
 // Cuando llegue una petición POST a '/api/v1/asistencia/registrar',
 // se ejecutará la función 'postRegistrarAsistencia' del controlador.
 router.post('/registrar', asistenciaController.postRegistrarAsistencia);
 
-console.log("✅ Rutas de '/asistencia' cargadas.");
+// Ruta para que un docente/administrador cree una nueva sesión de clase.
+// POST /api/v1/asistencia/sesion
+router.post('/sesion', asistenciaController.postCrearSesionQR);
+
+console.log("✅ Rutas de \'/asistencia\' cargadas.");
 
 module.exports = router;
