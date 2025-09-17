@@ -1,51 +1,69 @@
-// backend/src/index.js
+// 1. Cargar variables de entorno ANTES que cualquier otra cosa.
 require('dotenv').config();
+
+// Importamos los módulos necesarios
 const express = require('express');
 const cors = require('cors');
-const { initDB, shutdownDB } = require('./database');
+const database = require('../src/config/database'); // Tu módulo de conexión
+const apiRouter = require('../src/routes');   // ¡NUEVO! Este será nuestro enrutador principal
 
+// Creamos la aplicación de Express
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-// --- Logger simple ---
+// --- Middlewares ---
+app.use(cors()); // Habilita CORS para permitir peticiones desde Angular
+app.use(express.json()); // Permite al servidor entender cuerpos de petición en formato JSON
+
+// Logger simple para cada petición (tomado de tu código, ¡buena idea!)
 app.use((req, _res, next) => {
   console.log(`[REQ] ${req.method} ${req.url}`);
   next();
 });
 
-// Habilitar CORS para todas las peticiones ANTES de tus rutas
-app.use(cors());
+// --- Rutas de la API ---
+// Centralizamos todas las rutas bajo un prefijo /api/v1
+// El archivo './src/routes' se encargará de gestionar todas las sub-rutas.
+app.use('/api/v1', apiRouter);
 
-// --- Ping sin DB, para verificar que el server está arriba ---
-app.get('/api/__ping', (_req, res) => res.json({ ok: true, msg: 'pong' }));
-
-// --- Rutas  ---
-app.use('/api', require('./routes/health.routes.js'));  // GET /api/health
-app.use('/api', require('./routes/tables.routes.js'));  // GET /api/tables
-app.use('api' , require('./routes/table.routes')) //GET /Table/api/name
-app.use('/api', require('./routes/CRUD.routes.js')); //GET /api/CRUD
-app.use('/api', require('./routes/cliente.routes.js')); // POST /api/cliente
-app.use('/api', require('./routes/empleados.routes.js')); // GET /api/empleados
-
-// 1) Levantamos el server YA MISMO (así /api/__ping responde aunque la DB falle)
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`🚀 API escuchando en http://localhost:${port}`);
-});
-
-// 2) Inicializamos la DB en segundo paso (con logs explícitos)
-(async () => {
+// --- Función principal de arranque ---
+async function startup() {
+  console.log('Iniciando aplicación...');
   try {
-    console.log('[DB] Inicializando pool...');
-    await initDB();
-    console.log('✅ [DB] Pool Oracle listo');
-  } catch (err) {
-    console.error('❌ [DB] No se pudo inicializar el pool:', err.message);
-  }
-})();
+    console.log('Inicializando pool de la base de datos...');
+    await database.initDB();
 
-// Cierre ordenado
-process.on('SIGINT', async () => {
-  await shutdownDB();
-  process.exit(0);
+    // SOLO si la BD conecta, iniciamos el servidor web
+    app.listen(PORT, () => {
+      console.log(`✅ Servidor escuchando en http://localhost:${PORT}`);
+    });
+
+  } catch (err) {
+    console.error('❌ Error fatal al inicializar la base de datos:', err);
+    process.exit(1); // Si la BD no funciona, la app no puede arrancar
+  }
+}
+
+// --- Manejo del cierre ordenado ---
+async function shutdown(e) {
+  console.log('Cerrando aplicación...');
+  try {
+    await database.shutdownDB();
+  } catch (err) {
+    console.error('Error al cerrar el pool de la base de datos:', err);
+  }
+
+  process.exit(e ? 1 : 0);
+}
+
+// Escuchamos las señales del sistema para apagar la aplicación correctamente
+process.on('SIGTERM', () => shutdown());
+process.on('SIGINT', () => shutdown()); // Para Ctrl+C
+process.on('uncaughtException', (err) => {
+  console.error('Excepción no capturada:', err);
+  shutdown(err);
 });
+
+// ¡Arrancamos la aplicación!
+startup();
+
