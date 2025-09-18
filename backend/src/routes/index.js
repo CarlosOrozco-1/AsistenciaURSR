@@ -4,8 +4,7 @@ const router = express.Router();
 // --- Importación de todos los enrutadores de la aplicación ---
 // A medida que crees nuevas entidades, simplemente las importarás y registrarás aquí.
 const asistenciaRoutes = require('./asistencia.routes');
-// const estudianteRoutes = require('./estudiante.routes'); // <-- Descomenta cuando lo crees
-// const empleadoRoutes = require('./empleado.routes');   // <-- Descomenta cuando lo crees
+const usuarioRoutes = require('./usuario.routes');
 
 console.log('Cargando enrutador principal...');
 
@@ -13,8 +12,9 @@ console.log('Cargando enrutador principal...');
 // Todo lo que se defina en 'asistencia.routes.js' ahora estará bajo '/asistencia'
 // Ejemplo: una ruta '/registrar' en ese archivo será accesible en '/api/v1/asistencia/registrar'
 router.use('/asistencia', asistenciaRoutes);
-// router.use('/estudiantes', estudianteRoutes);
-// router.use('/empleados', empleadoRoutes);
+router.use('/usuarios', usuarioRoutes); // Rutas para la gestión de usuarios
+
+
 
 router
 
