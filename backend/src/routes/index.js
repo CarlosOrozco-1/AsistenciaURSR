@@ -16,6 +16,11 @@ router.use('/asistencia', asistenciaRoutes);
 // router.use('/estudiantes', estudianteRoutes);
 // router.use('/empleados', empleadoRoutes);
 
+router
+
+
+
+
 // --- Ruta de salud (Health Check) ---
 // Es una buena práctica tener un endpoint que verifique que la API y sus servicios funcionan.
 router.get('/health', (_req, res) => {

@@ -79,5 +79,6 @@ async function postCrearSesionQR(req, res) {
 console.log('✅ Controlador de asistencia cargado.');
 
 module.exports = {
-  postRegistrarAsistencia,
+  postRegistrarAsistencia, // Exportamos la función para que pueda ser usada en las rutas
+  postCrearSesionQR, // Exportamos la función para que pueda ser usada en las rutas
 };

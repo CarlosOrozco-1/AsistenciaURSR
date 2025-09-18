@@ -1,115 +1,98 @@
-// Importamos la utilidad para ejecutar sentencias y el driver de Oracle
-const { execute, oracledb } = require('../config/database');
+const oracledb = require('oracledb');
+// Importamos el módulo de base de datos que creamos
+const database = require('../config/database');
 
 console.log('Cargando servicio de asistencia...');
 
 /**
- * Contiene la lógica de negocio pura para el módulo de asistencia.
- * Llama al procedimiento 'registrar_asistencia' del paquete 'PKG_ASISTENCIA'.
- * @param {string} qrCode - El código QR recibido desde el frontend.
- * @param {string} carnet - El carnet del estudiante.
- * @returns {Promise<{success: boolean, message: string}>} Un objeto con el resultado de la operación.
+ * Llama al procedimiento almacenado para registrar la asistencia de un estudiante.
+ * @param {string} qrCode - El código QR escaneado.
+ * @param {string} carnet - El número de carnet del estudiante.
+ * @returns {Promise<object>} Un objeto con el resultado de la operación.
  */
 async function registrarAsistencia(qrCode, carnet) {
-  console.log(`Servicio: Ejecutando lógica para registrar asistencia del carnet ${carnet}`);
-
-  // Llamada al procedimiento almacenado DENTRO del paquete PKG_ASISTENCIA
-  const plsql = `
+  // Mapeo directo al procedimiento almacenado en el paquete
+  const sql = `
     BEGIN
       PKG_ASISTENCIA.registrar_asistencia(
-        p_codigo_qr     => :qrCode,
-        p_numero_carnet => :carnet,
-        p_tipo_registro => :tipoRegistro, -- TODO: Este valor debería ser dinámico (ej: 'ENTRADA'/'SALIDA')
-        p_resultado     => :resultado,
-        p_detalle       => :detalle
+        :p_codigo_qr, 
+        :p_numero_carnet, 
+        :p_tipo_registro, 
+        :p_resultado, 
+        :p_detalle
       );
     END;
   `;
 
-  // Mapeamos las variables de JavaScript a los parámetros del procedimiento.
   const binds = {
-    qrCode: qrCode,
-    carnet: carnet,
-    tipoRegistro: 'ENTRADA', // Por ahora, lo dejamos fijo como 'ENTRADA'
-    // Definimos los parámetros de SALIDA (OUT) para que Oracle nos devuelva sus valores.
-    resultado: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 20 },
-    detalle: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 255 }
+    p_codigo_qr: qrCode,
+    p_numero_carnet: carnet,
+    p_tipo_registro: 'ENTRADA', // Valor fijo por ahora
+    p_resultado: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 50 },
+    p_detalle: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 200 }
   };
 
-  try {
-    const result = await execute(plsql, binds, { autoCommit: true });
+  // Añadimos { autoCommit: true } porque este procedimiento modifica datos.
+  const result = await database.execute(sql, binds, { autoCommit: true });
 
-    // Extraemos los valores de los parámetros de salida
-    const resultadoBD = result.outBinds.resultado;
-    const detalleBD = result.outBinds.detalle;
-    const exito = resultadoBD === 'EXITO';
-
-    console.log(`Servicio: Respuesta de la BD -> Resultado: ${resultadoBD}, Detalle: "${detalleBD}"`);
-
-    // Devolvemos un objeto estandarizado al controlador.
-    return {
-      success: exito,
-      message: detalleBD,
-    };
-  } catch (error) {
-    console.error('Error al ejecutar PKG_ASISTENCIA.registrar_asistencia:', error);
-    // Relanzamos el error para que el controlador lo capture y devuelva un 500.
-    throw new Error('Ocurrió un error al procesar el registro en la base de datos.');
-  }
+  // Devolvemos un objeto claro con el resultado
+  return {
+    success: result.outBinds.p_resultado === 'EXITO',
+    message: result.outBinds.p_detalle
+  };
 }
+
 
 /**
- * Llama al procedimiento 'crear_sesion_qr' del paquete 'PKG_ASISTENCIA'.
+ * Llama al procedimiento almacenado para crear una nueva sesión y su código QR.
  * @param {number} idCursoImpartido - El ID del curso para el que se crea la sesión.
- * @returns {Promise<{success: boolean, message: string, qrCode: string | null}>} Un objeto con el resultado.
+ * @returns {Promise<object>} Un objeto con el resultado de la operación y el QR generado.
  */
 async function crearSesionQR(idCursoImpartido) {
-  console.log(`Servicio: Ejecutando lógica para crear sesión QR para el curso ${idCursoImpartido}`);
+  console.log(`Servicio: Creando sesión QR para el curso impartido ID: ${idCursoImpartido}`);
 
-  const plsql = `
+  const sql = `
     BEGIN
       PKG_ASISTENCIA.crear_sesion_qr(
-        p_id_curso_impartido  => :idCursoImpartido,
-        p_codigo_qr_generado  => :qrCode,
-        p_resultado           => :resultado,
-        p_detalle             => :detalle
+        :p_id_curso_impartido, 
+        :p_codigo_qr_generado, 
+        :p_resultado, 
+        :p_detalle
       );
     END;
   `;
 
   const binds = {
-    idCursoImpartido: idCursoImpartido,
-    // Definimos los parámetros de SALIDA (OUT)
-    qrCode: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 255 },
-    resultado: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 20 },
-    detalle: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 255 }
+    p_id_curso_impartido: idCursoImpartido,
+    p_codigo_qr_generado: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 200 },
+    p_resultado: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 50 },
+    p_detalle: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 200 }
   };
+  
+  // --- CORRECCIÓN Y DEBUGGING AQUÍ ---
+  console.log('--- DEBUG: Ejecutando SQL ---');
+  console.log(sql);
+  console.log('--- DEBUG: Con Binds ---');
+  console.log(binds);
+  console.log('-----------------------------');
+  
+  // Añadimos { autoCommit: true } porque este procedimiento inserta una nueva sesión.
+  const result = await database.execute(sql, binds, { autoCommit: true });
 
-  try {
-    const result = await execute(plsql, binds, { autoCommit: true });
-
-    const resultadoBD = result.outBinds.resultado;
-    const detalleBD = result.outBinds.detalle;
-    const qrCodeBD = result.outBinds.qrCode;
-    const exito = resultadoBD === 'EXITO';
-
-    console.log(`Servicio: Respuesta de la BD -> Resultado: ${resultadoBD}, Detalle: "${detalleBD}"`);
-
-    // Devolvemos un objeto estandarizado al controlador.
-    return {
-      success: exito,
-      message: detalleBD,
-      qrCode: exito ? qrCodeBD : null, // Solo devolvemos el QR si la operación fue exitosa
-    };
-  } catch (error) {
-    console.error('Error al ejecutar PKG_ASISTENCIA.crear_sesion_qr:', error);
-    throw new Error('Ocurrió un error al procesar la creación de la sesión en la base de datos.');
-  }
+  // Devolvemos un objeto claro con el resultado
+  return {
+    success: result.outBinds.p_resultado === 'EXITO',
+    message: result.outBinds.p_detalle,
+    qrCode: result.outBinds.p_codigo_qr_generado
+  };
 }
+
 
 console.log('✅ Servicio de asistencia cargado.');
 
+// Exportamos ambas funciones
 module.exports = {
   registrarAsistencia,
+  crearSesionQR
 };
 
