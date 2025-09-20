@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+
 // Importaremos el controlador de asistencia, que contendrá la lógica
 // para manejar la petición. Lo crearemos en el siguiente paso.
 const asistenciaController = require('../controllers/asistencia.controller');

@@ -4,7 +4,9 @@ const router = express.Router();
 // --- Importación de todos los enrutadores de la aplicación ---
 // A medida que crees nuevas entidades, simplemente las importarás y registrarás aquí.
 const asistenciaRoutes = require('./asistencia.routes');
-const usuarioRoutes = require('./usuario.routes');
+const usuarioRoutes = require('./regEstudiante.routes');
+const authRoutes = require('./auth.routes');
+
 
 console.log('Cargando enrutador principal...');
 
@@ -12,13 +14,8 @@ console.log('Cargando enrutador principal...');
 // Todo lo que se defina en 'asistencia.routes.js' ahora estará bajo '/asistencia'
 // Ejemplo: una ruta '/registrar' en ese archivo será accesible en '/api/v1/asistencia/registrar'
 router.use('/asistencia', asistenciaRoutes);
-router.use('/usuarios', usuarioRoutes); // Rutas para la gestión de usuarios
-
-
-
-router
-
-
+router.use('./regEstudiante.routes.js', usuarioRoutes); // Rutas para la gestión de usuarios
+router.use('/auth', authRoutes); // Rutas para la autenticación
 
 
 // --- Ruta de salud (Health Check) ---
@@ -31,6 +28,6 @@ router.get('/health', (_req, res) => {
   });
 });
 
-console.log('✅ Enrutador principal cargado correctamente.');
+console.log('Enrutador principal cargado correctamente.');
 
 module.exports = router;
