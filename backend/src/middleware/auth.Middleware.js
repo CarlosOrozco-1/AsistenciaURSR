@@ -13,7 +13,7 @@ const verificarToken = (req, res, next) => {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({
       status: 'error',
-      message: 'Token no proporcionado o mal formado.',
+      message: 'No tiene autorización para el ingreso al sistema.',
     });
   }
 
