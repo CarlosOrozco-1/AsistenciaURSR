@@ -146,6 +146,18 @@ async function eliminarUsuario(req, res) {
     }
 }
 
+// Listar usuarios inactivos
+async function listarUsuariosInactivos(req, res) {
+  const resultado = await gestionUsuariosService.listarUsuariosInactivos();
+
+  if (resultado.success) {
+    res.status(200).json(resultado);
+  } else {
+    res.status(500).json(resultado);
+  }
+}
+
+
 console.log('Controlador de gestión de usuarios cargado.');
 
 module.exports = {
@@ -153,5 +165,6 @@ module.exports = {
     obtenerUsuario,
     actualizarUsuario,
     cambiarEstadoUsuario,
-    eliminarUsuario
+    eliminarUsuario,
+    listarUsuariosInactivos
 };
