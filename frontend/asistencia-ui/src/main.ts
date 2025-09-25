@@ -12,6 +12,11 @@ import { appConfig } from './app/app.config';
 // No existe AppComponent ni app.component.ts
 import { App } from './app/app';
 
+// importar localización local
+import { registerLocaleData } from '@angular/common';
+import esGT from '@angular/common/locales/es-GT';
+registerLocaleData(esGT);
+
 
 
 

@@ -1,6 +1,5 @@
-// src/environments/environment.development.ts
-// Archivo de environment para DESARROLLO (ng serve).
+// Archivo de environment para DESARROLLO.
 export const environment = {
   production: false,
-  apiBase: 'http://localhost:3000/api' // tu backend local
+  apiBase: 'http://localhost:3000/api' // tu backend dev
 };

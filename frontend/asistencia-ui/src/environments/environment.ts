@@ -1,7 +1,5 @@
-// src/environments/environment.ts
-// Archivo de environment para PRODUCCIÓN (build).
-// Ajusta apiBase si despliegas el backend en otro host.
+// Archivo de environment para PRODUCCIÓN.
 export const environment = {
   production: true,
-  apiBase: 'http://localhost:3000/api' // placeholder mientras desarrollas
+  apiBase: 'https://TU-DOMINIO-REAL/api'
 };
