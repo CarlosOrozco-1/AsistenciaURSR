@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-app-shell',
-  imports: [],
+  standalone: true,
+  imports: [RouterOutlet], // ← Importa RouterOutlet para usar <router-outlet> en el HTML
   templateUrl: './app-shell.html',
-  styleUrl: './app-shell.css'
+  styleUrls: ['./app-shell.css'],
 })
 export class AppShell {
-
+  // sin lógica por ahora
 }

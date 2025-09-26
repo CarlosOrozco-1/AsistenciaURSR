@@ -1,1 +1,17 @@
-<p>app-shell works!</p>
+<!-- Shell: contenedor general del layout.
+     Debe incluir SIEMPRE un <router-outlet> para renderizar las rutas hijas. -->
+
+<!-- Encabezado mínimo temporal (lo cambiaremos cuando armemos el layout Material) -->
+<header class="shell__header">
+  <h1 class="shell__title">SGAE — Shell</h1>
+</header>
+
+<!-- Contenido de cada ruta hija -->
+<main class="shell__content">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Pie (opcional ahora) -->
+<footer class="shell__footer">
+  <small>© 2025 SGAE</small>
+</footer>
