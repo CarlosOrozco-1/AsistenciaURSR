@@ -176,3 +176,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Envolvente enlazable para que toda la tarjeta sea clicable */
+.quick__card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.quick__card {
+  /* mat-card ya trae padding/sombra; mantenemos coherencia con tus vars */
+  border-radius: 14px;
+}
+
+/* Mat-card header alinea el avatar (icono) correctamente */
+.mat-mdc-card-header .mat-mdc-card-avatar {
+  background: #eef2f7;
+  border-radius: 12px;
+}
+
+/* Opcional: tono del botón en acciones */
+.mdc-button--unelevated.mdc-button--primary,
+.mdc-button--raised.mdc-button--primary {
+  border-radius: 12px;
+}

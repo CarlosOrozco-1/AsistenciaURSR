@@ -1,12 +1,5 @@
-<!--
-  Dashboard (D-1): estructura base sin Angular Material.
-  Objetivo: dejar el wireframe de secciones (hero, accesos, noticias, estado, enlaces),
-  listo para aplicar Angular Material en D-2.
--->
-
-<!-- Contenedor principal responsivo -->
+<!-- Hero / Encabezado (igual que D-1) -->
 <section class="dash">
-  <!-- HERO / Encabezado -->
   <header class="dash__hero">
     <div class="hero__content">
       <h1 class="hero__title">Sistema de Gestión Académica</h1>
@@ -14,52 +7,82 @@
         Bienvenido, <span class="hero__user">Usuario</span>
       </p>
       <p class="hero__meta">
-        <!-- Fecha/hora en formato es-GT (en D-3 podemos hacerlo dinámico) -->
-        <span></span><time id="fecha-hoy">{{ fechaHoy }}</time>
+        <span></span><time id="fecha-hoy">{{ fechaHoy }}</time> <!-- Fecha actual -->
       </p>
     </div>
   </header>
 
-  <!-- Accesos rápidos (D-2 los convertimos en MatCards con íconos) -->
+  <!-- Accesos rápidos (ahora con MatCard + MatIcon) -->
   <section class="dash__quick">
     <h2 class="section__title">Accesos rápidos</h2>
     <div class="quick__grid">
       <!-- Card 1 -->
-      <a class="quick__card" href="/dashboard">
-        <div class="quick__card-title">Dashboard</div>
-        <div class="quick__card-desc">Resumen general</div>
+      <a class="quick__card-link" routerLink="/dashboard">
+        <mat-card class="quick__card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar aria-hidden="true">dashboard</mat-icon>
+            <mat-card-title>Dashboard</mat-card-title>
+            <mat-card-subtitle>Resumen general</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-actions>
+            <button mat-button color="primary">Abrir</button>
+          </mat-card-actions>
+        </mat-card>
       </a>
 
       <!-- Card 2 -->
-      <a class="quick__card" href="/empleados">
-        <div class="quick__card-title">Empleados</div>
-        <div class="quick__card-desc">Gestión de personal</div>
+      <a class="quick__card-link" routerLink="/empleados">
+        <mat-card class="quick__card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar aria-hidden="true">badge</mat-icon>
+            <mat-card-title>Empleados</mat-card-title>
+            <mat-card-subtitle>Gestión de personal</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-actions>
+            <button mat-button color="primary">Abrir</button>
+          </mat-card-actions>
+        </mat-card>
       </a>
 
       <!-- Card 3 -->
-      <a class="quick__card" href="/clientes">
-        <div class="quick__card-title">Clientes</div>
-        <div class="quick__card-desc">Gestión de clientes</div>
+      <a class="quick__card-link" routerLink="/clientes">
+        <mat-card class="quick__card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar aria-hidden="true">group</mat-icon>
+            <mat-card-title>Clientes</mat-card-title>
+            <mat-card-subtitle>Gestión de clientes</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-actions>
+            <button mat-button color="primary">Abrir</button>
+          </mat-card-actions>
+        </mat-card>
       </a>
 
-      <!-- Card 4 (placeholder a futuro: Usuarios / Docentes / Admin) -->
-      <a class="quick__card" href="#">
-        <div class="quick__card-title">Asistencia</div>
-        <div class="quick__card-desc">Sesiones y reportes</div>
+      <!-- Card 4 (placeholder) -->
+      <a class="quick__card-link" routerLink="/dashboard">
+        <mat-card class="quick__card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar aria-hidden="true">qr_code_2</mat-icon>
+            <mat-card-title>Asistencia</mat-card-title>
+            <mat-card-subtitle>Sesiones y reportes</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-actions>
+            <button mat-button color="primary">Abrir</button>
+          </mat-card-actions>
+        </mat-card>
       </a>
     </div>
   </section>
 
-  <!-- Novedades / avisos -->
+  <!-- Novedades -->
   <section class="dash__news">
     <h2 class="section__title">Novedades</h2>
     <div class="news__box">
       <p class="news__empty">Sin novedades por ahora.</p>
-      <!-- D-3: aquí podríamos renderizar avisos desde backend -->
     </div>
   </section>
 
-  <!-- Estado del sistema -->
+  <!-- Estado -->
   <section class="dash__status">
     <h2 class="section__title">Estado del sistema</h2>
     <div class="status__grid">
@@ -72,10 +95,9 @@
         <div class="status__value status__value--unknown">—</div>
       </div>
     </div>
-    <!-- D-3: conectaremos un endpoint de healthcheck para mostrar OK/ERROR -->
   </section>
 
-  <!-- Enlaces útiles -->
+  <!-- Enlaces -->
   <section class="dash__links">
     <h2 class="section__title">Enlaces útiles</h2>
     <ul class="links__list">
