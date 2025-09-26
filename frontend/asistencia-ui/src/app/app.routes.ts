@@ -13,7 +13,12 @@ export const routes: Routes = [
     component: AppShell,      // <- contenedor (toolbar/sidenav/router-outlet)
     children: [
       // Redirect raíz: redirecciona a /dashboard
-      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+      { path: '', pathMatch: 'full', redirectTo: 'intro' },
+
+      // Intro/Splash (standalone)
+      {
+        path: 'intro', loadComponent: () => import('./layout/pages/splash/splash').then(m => m.Splash)
+      },
 
         // Dashboard (standalone)
       {
