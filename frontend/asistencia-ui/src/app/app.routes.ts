@@ -36,8 +36,11 @@ export const routes: Routes = [
 
   // Rutas públicas y de error (las activaremos cuando existan los componentes)
 
-  { path: 'login', loadComponent: () => import('./features/auth/login/login').then(m => m.Login) }, // Página de login
+  { path: 'login', loadComponent: () => import('./features/auth/login/login').then(m => m.LoginComponent) }, // Página de login
+
   { path: 'forbidden', loadComponent: () => import('./layout/pages/forbidden/forbidden').then(m => m.Forbidden) }, // Página 403: acceso denegado (la usaremos más adelante con RoleGuard)
+
   { path: 'not-found', loadComponent: () => import('./layout/pages/not-found/not-found').then(m => m.NotFound) },
+  
   { path: '**', loadComponent: () => import('./layout/pages/not-found/not-found').then(m => m.NotFound) }, // Catch-all 404: cualquier ruta no definida cae aquí
 ];
