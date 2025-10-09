@@ -1,0 +1,261 @@
+/*
+ * Archivo de Estilos: login.component.css
+ * Componente: App (Login Redesign)
+ *
+ * NOTA: Al ser un componente standalone, estos estilos se aplicarán automáticamente
+ * al componente donde se definan.
+ */
+
+/* --- Variables de Color (¡Personalízalas!) --- */
+:host {
+    --primary-color: #6a11cb; /* Púrpura */
+    --secondary-color: #2575fc; /* Azul */
+    --welcome-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    --form-bg: #f4f7fc;
+    --card-bg: #ffffff;
+    --text-color-light: #ffffff;
+    --text-color-dark: #333333;
+    --text-color-secondary: #777777;
+    font-family: 'Inter', sans-serif; /* Tipografía Inter */
+    display: block; /* Necesario para que :host funcione bien */
+}
+
+/* --- Sobrescribir estilos de Angular Material para usar las variables --- */
+/* Estilo del botón principal (mat-raised-button.login-button) */
+.mat-mdc-raised-button.login-button {
+  --mdc-filled-button-container-color: var(--primary-color);
+  --mdc-filled-button-label-text-color: var(--text-color-light);
+  background-color: var(--primary-color); /* Fallback */
+  height: auto; /* Permitir que el padding de .login-button controle la altura */
+  line-height: 1;
+  padding: 1rem 0; /* Aplicado desde .login-button */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mat-mdc-raised-button.login-button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo del texto del enlace de 'Olvidé mi contraseña' */
+.forgot-password {
+    color: var(--primary-color); /* Usar primary-color para el enlace */
+}
+
+/* Estilo de campos de texto (aunque ya se ven bien con outline) */
+.mat-mdc-form-field {
+    --mdc-outlined-text-field-container-shape: 8px; /* Bordes más redondeados */
+}
+
+
+/* --- Contenedor Principal --- */
+.login-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* --- Panel Izquierdo de Bienvenida --- */
+.welcome-panel {
+    flex: 1;
+    background: var(--welcome-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 3rem;
+    color: var(--text-color-light);
+}
+
+.welcome-content {
+    text-align: center;
+    max-width: 450px;
+}
+
+.welcome-content h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.welcome-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* --- La magia de la Ola Divisoria --- */
+.welcome-panel::after {
+    content: '';
+    position: absolute;
+    right: -150px; /* Ajusta para más o menos curva */
+    top: -10%;
+    bottom: -10%;
+    width: 300px;
+    background: var(--form-bg);
+    border-top-left-radius: 50% 100%;
+    border-bottom-left-radius: 50% 100%;
+    box-shadow: -10px 0px 20px rgba(0, 0, 0, 0.05);
+    z-index: 1; /* Asegura que la ola esté sobre el panel de bienvenida pero detrás del formulario */
+}
+
+/* --- Panel Derecho del Formulario --- */
+.login-panel {
+    flex: 1.2;
+    background: var(--form-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    z-index: 2; /* Asegura que el formulario esté sobre la ola */
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+    border: none;
+}
+
+/* --- AJUSTES DE ENCABEZADO DE TARJETA --- */
+
+/* Centramos el contenido de la cabecera de la tarjeta para que el texto siga la alineación */
+.mat-mdc-card-header {
+    display: flex;
+    flex-direction: column; /* Apilamos título y subtítulo */
+    align-items: center; /* Centramos horizontalmente */
+    padding-bottom: 0; /* Quitamos el padding inferior por defecto de Material */
+}
+
+/* --- TÍTULO (Iniciar Sesión) MEJORADO --- */
+.login-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    color: #555555; /* Un gris más suave que el dark por defecto */
+    /* Lo levantamos un poco y le damos margen inferior para separarlo del subtítulo */
+    margin-top: 0.5rem; /* Separar de la parte superior de la tarjeta */
+    margin-bottom: 0.8rem; /* Mayor interlineado con el subtítulo */
+}
+
+/* --- SUBTÍTULO (Registrarse) MEJORADO --- */
+.login-subtitle {
+    color: var(--text-color-secondary);
+    font-size: 0.95rem;
+    /* Quitamos el margin-top porque ya lo controlamos en el título y en el mat-card-header */
+    margin-top: 0; 
+    text-align: center; 
+    /* Margen inferior para separarlo de los campos de formulario */
+    margin-bottom: 2rem; 
+}
+
+.login-subtitle a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.full-width {
+    width: 100%;
+}
+
+mat-form-field {
+    margin-bottom: 0.5rem;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.forgot-password {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+/* --- Botón Principal --- */
+.login-button {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    line-height: 1; /* Para que el texto no salte */
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Separador y Login Social --- */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--text-color-secondary);
+    margin: 1.5rem 0;
+    font-size: 0.85rem;
+}
+
+.separator::before, .separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.separator:not(:empty)::before {
+    margin-right: .5em;
+}
+
+.separator:not(:empty)::after {
+    margin-left: .5em;
+}
+
+.social-login {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-button {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0; /* Ajuste el padding para mat-stroked-button */
+    border-radius: 8px;
+}
+
+/* --- Responsividad para móviles --- */
+@media (max-width: 992px) {
+    .login-container {
+        flex-direction: column;
+        height: auto; /* Permitir que el contenido defina la altura */
+        min-height: 100vh;
+    }
+    .welcome-panel {
+        flex: 0.5; /* Menos espacio en móvil */
+        padding: 2rem;
+    }
+    .welcome-panel::after {
+        display: none; /* Ocultamos la ola en móvil */
+    }
+    .login-panel {
+        flex: 1;
+        padding: 2rem;
+    }
+    .login-card {
+        box-shadow: none; /* Mejor sin sombra en vista móvil */
+    }
+    .welcome-content h2 {
+        font-size: 2rem;
+    }
+}

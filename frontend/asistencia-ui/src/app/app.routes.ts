@@ -1,46 +1,52 @@
+// src/app/app.routes.ts
+
 import { Routes } from '@angular/router';
 
-// Rutas existentes de tus features de prueba
+// Rutas existentes (features de prueba)
 import { ListaClientesComponent } from './features/clientes/lista-clientes/lista-clientes';
 import { ListaEmpleados } from './features/empleados/lista-empleados/lista-empleados';
 
-// Shell (layout contenedor con router-outlet)
+// Shell (layout contenedor con router-outlet) SOLO para rutas privadas
 import { AppShell } from './layout/shell/app-shell/app-shell';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: AppShell,      // <- contenedor (toolbar/sidenav/router-outlet)
-    children: [
-      // Redirect raíz: redirecciona a /dashboard
-      { path: '', pathMatch: 'full', redirectTo: 'intro' },
+  // --- Rutas PÚBLICAS (fuera del Shell) ---
+  
+  // 1. Cambiamos la redirección de 'intro' a 'login'
+  { path: '', pathMatch: 'full', redirectTo: 'login' }, 
 
-      // Intro/Splash (standalone)
-      {
-        path: 'intro', loadComponent: () => import('./layout/pages/splash/splash').then(m => m.Splash)
-      },
+  // 2. ELIMINAMOS LA RUTA DEL COMPONENTE SPLASH
+  // {
+  //   path: 'intro',
+  //   loadComponent: () => import('./layout/pages/splash/splash').then(m => m.Splash),
+  // },
 
-        // Dashboard (standalone)
-      {
-        path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard)
-      },
+  // Login (pública, fuera del shell)
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/login/login').then(m => m.LoginComponent),
+    // Más adelante le agregamos un guard "guest" para evitar ver login si ya hay sesión.
+  },
+      // Registro de estudiante (pública, fuera del shell)
+      {path: 'registro', loadComponent: () => import('./features/auth/registro/registro').then(m => m.RegistroComponent)},
 
-      // Rutas privadas actuales (de prueba), renderizan dentro del Shell
-      { path: 'clientes', component: ListaClientesComponent },
-      { path: 'empleados', component: ListaEmpleados },
+  // --- Rutas PRIVADAS (dentro del Shell) ---
+  {
+    path: '',
+    component: AppShell,
+    // Más adelante: canMatch: [authGuard]  <-- cuando te pase el guard
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard)
+      },
+      { path: 'clientes', component: ListaClientesComponent },
+      { path: 'empleados', component: ListaEmpleados },
+    ],
+  },
 
-
-    ],
-
-  },
-
-  // Rutas públicas y de error (las activaremos cuando existan los componentes)
-
-  { path: 'login', loadComponent: () => import('./features/auth/login/login').then(m => m.LoginComponent) }, // Página de login
-
-  { path: 'forbidden', loadComponent: () => import('./layout/pages/forbidden/forbidden').then(m => m.Forbidden) }, // Página 403: acceso denegado (la usaremos más adelante con RoleGuard)
-
-  { path: 'not-found', loadComponent: () => import('./layout/pages/not-found/not-found').then(m => m.NotFound) },
-  
-  { path: '**', loadComponent: () => import('./layout/pages/not-found/not-found').then(m => m.NotFound) }, // Catch-all 404: cualquier ruta no definida cae aquí
+  // Errores / extra
+  { path: 'forbidden', loadComponent: () => import('./layout/pages/forbidden/forbidden').then(m => m.Forbidden) },
+  { path: 'not-found', loadComponent: () => import('./layout/pages/not-found/not-found').then(m => m.NotFound) },
+  { path: '**', redirectTo: 'not-found' },
 ];

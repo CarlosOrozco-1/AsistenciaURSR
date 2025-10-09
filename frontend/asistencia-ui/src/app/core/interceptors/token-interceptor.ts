@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthStorage } from '../auth/auth-storage';
 
-const AUTH_EXCLUDE = ['/auth/login']; // rutas a omitir (ajusta si tu login es distinto)
+const AUTH_EXCLUDE = ['/v1/auth/login']; // rutas a omitir (ajusta si tu login es distinto)
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const storage = inject(AuthStorage);

@@ -1,17 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+// src/app/layout/pages/splash/splash.ts
+import { Component } from '@angular/core'; // Ya no necesitamos OnInit ni Router
 
 @Component({
-  selector: 'app-splash',
+  selector: 'app-loading-overlay', // Cambiamos el selector para indicar su nuevo rol
   standalone: true,
   templateUrl: './splash.html',
   styleUrls: ['./splash.css']
 })
-export class Splash implements OnInit {
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    // Pequeña espera para “intro” y luego ir al login
-    setTimeout(() => this.router.navigateByUrl('/login'), 3500);
-  }
-}
+export class Splash {} // Puedes renombrarla a LoadingOverlay si quieres ser más claro

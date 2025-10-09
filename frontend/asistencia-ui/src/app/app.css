@@ -1,0 +1,10 @@
+/* src/app/app.css */
+/* Este archivo de estilos pertenece al componente <app-root>. 
+  Lo mantenemos simple, ya que el splash se maneja a nivel global (index.html y styles.css).
+*/
+
+:host {
+  /* Asegura que el componente raíz ocupe todo el espacio. */
+  display: block;
+  min-height: 100vh;
+}

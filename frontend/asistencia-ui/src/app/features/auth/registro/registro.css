@@ -1,0 +1,135 @@
+/* Fondo agradable */
+.auth-bg {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 500px at 0% 0%, #eaf2ff 0%, transparent 60%),
+    radial-gradient(800px 400px at 100% 100%, #eef7ff 0%, transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+/* Wrapper para centrar el card */
+.auth-wrap {
+  width: 100%;
+  max-width: 880px;
+}
+
+/* Card de registro */
+.reg-card {
+  border-radius: 18px !important;
+  overflow: hidden;
+  box-shadow:
+    0 2px 8px rgba(10, 34, 68, 0.05),
+    0 16px 48px rgba(10, 34, 68, 0.10);
+}
+
+/* Header */
+.brand-avatar {
+  background: #004aad10;
+  color: #004aad;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.brand-avatar mat-icon { font-size: 22px; }
+
+.title {
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+.subtitle {
+  opacity: .8;
+}
+
+/* Alert de error */
+.alert.error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin: 8px 0 16px;
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+}
+
+/* Grid del formulario */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Campos de ancho completo */
+.full {
+  grid-column: 1 / -1;
+}
+
+/* Ajustes visuales a form-field */
+mat-form-field {
+  width: 100%;
+}
+
+mat-form-field .mat-mdc-form-field-subscript-wrapper {
+  margin-top: 2px;
+}
+
+/* Acciones */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.actions button[mat-raised-button] {
+  min-width: 170px;
+  height: 44px;
+}
+
+.actions button[mat-stroked-button] {
+  height: 44px;
+}
+
+/* Spinner dentro del botón */
+.mat-mdc-progress-spinner {
+  margin-right: 10px;
+}
+
+/* Footer */
+.footer {
+  padding: 12px 24px 20px;
+  color: #64748b;
+  font-size: .92rem;
+}
+
+/* Responsive */
+@media (max-width: 840px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .auth-wrap {
+    max-width: 560px;
+  }
+}
+
+/* Dark mode (si el SO está en oscuro) */
+@media (prefers-color-scheme: dark) {
+  .auth-bg {
+    background:
+      radial-gradient(1200px 500px at 0% 0%, #0e1b33 0%, transparent 60%),
+      radial-gradient(800px 400px at 100% 100%, #0f223d 0%, transparent 55%),
+      linear-gradient(180deg, #0b1220 0%, #0e1728 100%);
+  }
+  .reg-card {
+    box-shadow:
+      0 2px 8px rgba(0,0,0,.25),
+      0 16px 48px rgba(0,0,0,.35);
+  }
+  .brand-avatar { background: #5ca6ff22; color: #5ca6ff; }
+  .footer { color: #94a3b8; }
+}

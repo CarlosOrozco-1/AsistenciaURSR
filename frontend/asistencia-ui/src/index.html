@@ -1,15 +1,26 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>AsistenciaUi</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Material Icons -->
-</head>
+  <meta charset="utf-8">
+  <title>AsistenciaUi</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> </head>
 <body>
-  <app-root></app-root>
+  <div id="initial-splash" class="splash-container">
+    <img src="assets/img/mundo.png" alt="SGAE Logo" class="splash__image-logo">
+    <div class="splash__text">
+      <h1>Sede San Raymundo</h1>
+      <h3>Cargando aplicación...</h3>
+    </div>
+    <div class="splash__loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+  </div>
+    <app-root></app-root>
 </body>
 </html>

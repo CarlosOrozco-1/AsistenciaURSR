@@ -1,0 +1,22 @@
+<div class="carousel" *ngIf="slides?.length">
+  <div class="slide" *ngFor="let s of slides; let i = index" [class.active]="i === current">
+    <img [src]="s.image" [alt]="s.title || 'slide'" />
+    <div class="caption" *ngIf="s.title || s.subtitle">
+      <h3 *ngIf="s.title">{{ s.title }}</h3>
+      <p *ngIf="s.subtitle">{{ s.subtitle }}</p>
+    </div>
+  </div>
+
+  <button type="button" class="nav prev" (click)="prev()">‹</button>
+  <button type="button" class="nav next" (click)="next()">›</button>
+
+  <div class="dots">
+    <button
+      type="button"
+      *ngFor="let _ of slides; let i = index"
+      [class.active]="i === current"
+      (click)="current = i"
+      aria-label="ir al slide {{ i + 1 }}">
+    </button>
+  </div>
+</div>

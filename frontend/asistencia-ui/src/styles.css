@@ -1,4 +1,137 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.css
+ * * Este CSS controla el "Splash Duro" que está en index.html,
+ * asegurando la visibilidad instantánea al cargar la aplicación.
+ */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* =========================================================================
+   1. Contenedor Principal y Visibilidad (CLAVE para evitar el flash)
+   ========================================================================= */
+.splash-container {
+  /* Fija el splash en toda la pantalla, por encima de la app de Angular */
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  z-index: 9999; /* Máximo z-index para estar siempre encima */
+  
+  /* Layout centralizado */
+  display: flex; 
+  flex-direction: column;
+  align-items: center; /* Centra horizontalmente el contenido */
+  justify-content: center; 
+  gap: 24px; /* Espaciado entre elementos */
+  
+  /* Fondo profesional */
+  background-color: #003563; /* Tu color azul oscuro */
+  overflow: hidden; 
+  
+  /* Transición para ocultar el splash suavemente (usada por app.ts) */
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-out, visibility 0.5s; 
+}
+
+/* CLASE DE CONTROL: Oculta el splash al finalizar la carga (activada en app.ts) */
+.splash-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important; 
+}
+
+/* =========================================================================
+   2. Estilos de Elementos Internos
+   ========================================================================= */
+
+/* Estilo para la imagen del logo (assets/img/mundo.png) */
+.splash__image-logo {
+  max-width: 200px; /* Tamaño máximo del logo, ajusta si es necesario */
+  height: auto;
+  margin-bottom: 20px; 
+  animation: fadeIn 1.5s ease-out forwards;
+}
+
+/* Contenedor de texto: Asegura alineación central */
+.splash__text { 
+  font-family: 'Roboto', sans-serif; /* Usamos la fuente importada en index.html */
+  color: #e0e0e0; 
+  text-align: center; /* Centra el texto (h1 y h3) horizontalmente */
+  margin-top: 10px; 
+  margin-bottom: 20px; 
+  
+  /* Animación de aparición */
+  animation: fadeIn 2s ease-out forwards; 
+  animation-delay: 0.5s; 
+  opacity: 0; 
+}
+
+/* Estilo para el Título Principal (H1) - Toque Suave */
+.splash__text h1 {
+  color: #f0f0f0; /* Blanco más suave */
+  font-size: 2.2rem; 
+  font-weight: 300; /* CLAVE: Peso ligero para la suavidad */
+  letter-spacing: 3px; /* Espaciado entre letras para un toque moderno */
+  margin: 0 0 10px 0; 
+}
+
+/* Estilo para el Subtítulo (H3) - Mensaje de Carga */
+.splash__text h3 {
+  color: #bdbdbd; /* Gris claro sutil */
+  font-size: 1.1rem;
+  font-weight: 400; /* Peso normal/ligero */
+  margin: 0; 
+}
+
+/* =========================================================================
+   3. Cargador de Puntos Saltarines
+   ========================================================================= */
+
+.splash__loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; 
+  margin-top: 15px;
+}
+
+.loader-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ffffff; /* Puntos blancos para contrastar con el fondo oscuro */
+  animation: bounce 0.8s infinite ease-in-out;
+}
+
+/* Desfase para el efecto de "ola" */
+.loader-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.loader-dot:nth-child(3) {
+  animation-delay: -0.32s;
+}
+
+/* =========================================================================
+   4. Keyframes (Animaciones)
+   ========================================================================= */
+
+/* Animación de los puntos (Bounce) */
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1.0);
+  }
+}
+
+/* Animación de aparición suave (FadeIn) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
